@@ -16,7 +16,7 @@ const errMw = (err, req, res, next) => {
     console.log(err.message)
 }
 
-const users = [
+let users = [
     {id: 1, name: 'aaa'},
     {id: 2, name: 'bbb'},
     {id: 3, name: 'ccc'}
@@ -27,7 +27,7 @@ app.use(mw2)
 app.use(errMw)
 
 app.get('/', (req, res) => res.send('Hello Express!!'))
-
+/////////////////////////////////////////////////////////
 app.get('/users', (req, res) => {
     req.query.limit = req.query.limit || 10
     const limit = parseInt(req.query.limit, 10)
@@ -39,7 +39,7 @@ app.get('/users', (req, res) => {
         res.json(users.slice(0, limit))
     }    
 })
-
+/////////////////////////////////////////////////////////
 app.get('/users/:id', (req, res) => {
     const id = parseInt(req.params.id, 10)
     const user = users.filter(user => user.id === id)[0]
@@ -53,6 +53,20 @@ app.get('/users/:id', (req, res) => {
     }
     
     res.json(user)
+})
+/////////////////////////////////////////////////////////
+app.delete('/users/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10)
+    const user = users.filter(user => user.id === id)[0]
+    users = users.filter(user => user.id !== id)
+
+    if(Number.isNaN(id)) {
+        return res.status(400).end()
+    }
+    if(!user) {
+        return res.status(404).end()
+    }
+    res.status(204).end()
 })
 
 module.exports = app

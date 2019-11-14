@@ -131,7 +131,7 @@ $ npm t # test supertest
 
 ### ■ API Server 개발 (with TDD)
 
-- GET /users
+#### GET /users
 
 ```js
 app.get('/users', (req, res) => {
@@ -147,26 +147,7 @@ app.get('/users', (req, res) => {
 })
 ```
 
-```bash
-$ npm t
-
-> nodejs-api-server@1.0.0 test D:\NodeJS
-> mocha ./index.spec.js
-
-GET /users
-    Success...
-GET /users 200 3.620 ms - 67
-      √ return array... (209ms)
-GET /users?limit=2 200 0.532 ms - 45
-      √ Number of maximum limits as well as response... (38ms)
-    Failure...
-GET /users?limit=one 400 0.505 ms - -
-      √ If limit is not Integer, return 400 code
-
-  3 passing (309ms)
-```
-
-- GET /users/:id
+#### GET /users/:id
 
 ```js
 app.get('/users/:id', (req, res) => {
@@ -185,6 +166,26 @@ app.get('/users/:id', (req, res) => {
 })
 ```
 
+#### DELETE /users/:id
+
+```js
+app.delete('/users/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10)
+    const user = users.filter(user => user.id === id)[0]
+    users = users.filter(user => user.id !== id)
+
+    if(Number.isNaN(id)) {
+        return res.status(400).end()
+    }
+    if(!user) {
+        return res.status(404).end()
+    }
+    res.status(204).end()
+})
+```
+
+#### Test Result
+
 ```bash
 $ npm t
 
@@ -193,21 +194,31 @@ $ npm t
 
 GET /users
     Success...
-GET /users/1 200 5.005 ms - 21
-GET /users 200 0.667 ms - 67
+GET /users/1 200 4.165 ms - 21
+GET /users 200 0.466 ms - 67
       √ return array...
-GET /users?limit=2 200 0.502 ms - 45
+GET /users?limit=2 200 0.237 ms - 45
       √ Number of maximum limits as well as response...
     Failure...
-GET /users?limit=one 400 0.108 ms - -
+GET /users?limit=one 400 0.135 ms - -
       √ If limit is not Integer, return 400 code
 
 GET /users/:id
     Failure...
-GET /users/one 400 0.116 ms - -
+GET /users/one 400 0.123 ms - -
       √ id is not number
-GET /users/9 404 0.083 ms - -
+GET /users/9 404 0.079 ms - -
       √ not found id
 
-  5 passing (167ms)
+DELETE /users/:id
+    Success...
+DELETE /users/3 204 0.279 ms - -
+      √ response 204
+    Failure...
+DELETE /users/one 400 0.156 ms - -
+      √ id is not number
+DELETE /users/9 404 0.081 ms - -
+      √ not found id
+
+  8 passing (221ms)
 ```

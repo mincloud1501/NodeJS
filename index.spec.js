@@ -66,3 +66,28 @@ describe('GET /users/:id', () => {
         })
     })
 })
+/////////////////////////////////////////////////////////////
+describe('DELETE /users/:id', () => {
+    describe('Success...', () => {
+        it('response 204', done => {
+            request(app)
+            .delete('/users/3')
+            .expect(204)
+            .end(done)
+        })
+    })
+    describe('Failure...', () => {
+        it('id is not number', (done) => {
+            request(app)
+                .delete('/users/one')
+                .expect(400)
+                .end(done)
+        })
+        it('not found id', (done) => {
+            request(app)
+                .delete('/users/9')
+                .expect(404)
+                .end(done)
+        })
+    })
+})
