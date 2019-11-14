@@ -2,12 +2,11 @@
 
 ### ■ Installation
 
-- [![Sources](https://img.shields.io/badge/참고-express-yellow)](https://github.com/mincloud1501/Python/blob/master/NodeJS/node_modules/express/Readme.md) : [Node.js](https://nodejs.org/en/) module available through the [npm registry](https://www.npmjs.com/)
-- [![Sources](https://img.shields.io/badge/참고-morgan-yellow)](https://github.com/mincloud1501/Python/blob/master/NodeJS/node_modules/morgan/README.md) : HTTP request logger middleware for node.js
-- [![Sources](https://img.shields.io/badge/참고-mocha-yellow)](https://github.com/mincloud1501/Python/blob/master/NodeJS/node_modules/mocha/README.md) : Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser
-- [![Sources](https://img.shields.io/badge/참고-should-yellow)](https://github.com/mincloud1501/Python/blob/master/NodeJS/node_modules/should/Readme.md) : should is an expressive, readable, framework-agnostic assertion library
-- [![Sources](https://img.shields.io/badge/참고-supertest-yellow)](https://github.com/mincloud1501/Python/blob/master/NodeJS/node_modules/supertest/README.md) : SuperAgent driven library for testing HTTP servers, TDD(Test-Driven-Developement) 지향
-
+- [![Sources](https://img.shields.io/badge/참고-express-yellow)](https://github.com/mincloud1501/NodeJS/tree/master/node_modules/express) : [Node.js](https://nodejs.org/en/) module available through the [npm registry](https://www.npmjs.com/)
+- [![Sources](https://img.shields.io/badge/참고-morgan-yellow)](https://github.com/mincloud1501/NodeJS/tree/master/node_modules/morgan) : HTTP request logger middleware for node.js
+- [![Sources](https://img.shields.io/badge/참고-mocha-yellow)](https://github.com/mincloud1501/NodeJS/tree/master/node_modules/mocha) : Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser
+- [![Sources](https://img.shields.io/badge/참고-should-yellow)](https://github.com/mincloud1501/NodeJS/tree/master/node_modules/should) : should is an expressive, readable, framework-agnostic assertion library
+- [![Sources](https://img.shields.io/badge/참고-supertest-yellow)](https://github.com/mincloud1501/NodeJS/tree/master/node_modules/supertest) : SuperAgent driven library for testing HTTP servers, TDD(Test-Driven Developement) 지향
 
 ```bash
 $ npm install express
@@ -16,6 +15,11 @@ $ npm i mocha --save-dev # devDependencies 설정
 $ npm i should --save-dev
 $ npm i supertest --save-dev
 ```
+
+#### ★ TTD (Test Driven Development)
+- test를 먼저 만들고 test를 통과하기 위한 것을 coding하는 것 즉, 만드는 과정에서 우선 test를 작성하고 그걸 통과하는 code를 만들고를 반복하면서 제대로 동작하는지에 대한 feedback을 적극적으로 받는 것
+- decision과 feedback 사이의 gap에 대한 인식, gap을 조절하기 위한 기술
+- TDD는 프로그래밍 기법이나 기술적인 느낌보다는 심리적인 것으로 볼 수 있다.
 
 ### ■ Initialize
 
@@ -123,4 +127,41 @@ $ npm t # test supertest
     √ return array... (181ms)
 
   1 passing (198ms)
+```
+
+### ■ API Server 개발 (with TDD)
+
+- index.js
+
+```js
+app.get('/users', (req, res) => {
+    req.query.limit = req.query.limit || 10
+    const limit = parseInt(req.query.limit, 10)
+
+    if(Number.isNaN(limit)) {
+        res.status(400).end()
+        
+    } else {
+        res.json(users.slice(0, limit))
+    }    
+})
+```
+
+```bash
+$ npm t
+
+> nodejs-api-server@1.0.0 test D:\NodeJS
+> mocha ./index.spec.js
+
+GET /users
+    Success...
+GET /users 200 3.620 ms - 67
+      √ return array... (209ms)
+GET /users?limit=2 200 0.532 ms - 45
+      √ Number of maximum limits as well as response... (38ms)
+    Failure...
+GET /users?limit=one 400 0.505 ms - -
+      √ If limit is not Integer, return 400 code
+
+  3 passing (309ms)
 ```

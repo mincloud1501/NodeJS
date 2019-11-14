@@ -17,8 +17,9 @@ const errMw = (err, req, res, next) => {
 }
 
 const users = [
-    {name: 'aaa'},
-    {name: 'bbb'}
+    {id: 1, name: 'aaa'},
+    {id: 2, name: 'bbb'},
+    {id: 3, name: 'ccc'}
 ]
 
 app.use(logger('dev'))
@@ -27,9 +28,16 @@ app.use(errMw)
 
 app.get('/', (req, res) => res.send('Hello Express!!'))
 
-app.get('/users', (req, res) => res.json(users))
+app.get('/users', (req, res) => {
+    req.query.limit = req.query.limit || 10
+    const limit = parseInt(req.query.limit, 10)
 
-// supertest를 위해 주석 처리
-// app.listen(3000, () => console.log('running...'))
+    if(Number.isNaN(limit)) {
+        res.status(400).end()
+        
+    } else {
+        res.json(users.slice(0, limit))
+    }    
+})
 
 module.exports = app
