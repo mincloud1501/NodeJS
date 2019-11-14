@@ -1,0 +1,29 @@
+{
+  "name": "nodejs-api-server",
+  "version": "1.0.0",
+  "description": "nodejs-api-server",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "mocha ./index.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mincloud1501/NodeJS.git"
+  },
+  "author": "mincloud",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mincloud1501/NodeJS/issues"
+  },
+  "homepage": "https://github.com/mincloud1501/NodeJS#readme"
+}

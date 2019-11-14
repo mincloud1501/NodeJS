@@ -1,26 +1,35 @@
-const http = require('http');
+const express = require('express')
+const logger = require('morgan')
+const app = express()
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const mw1 = (req, res, next) => {
+    console.log('middleware1...')
+    next()
+}
 
-const server = http.createServer((req, res) => {
-  console.log(req.url)
+const mw2 = (req, res, next) => {
+    //throw Error('error!!')
+    next()
+}
 
-  if(req.url == "/") {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/plain');
-        res.end('NodeJS Test!!!\n');
-   } else if(req.url == "/users") {
-        const users = [
-            {name: 'aaa'},
-            {name: 'bbb'}
-        ]
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(users));
-   }
-});
+const errMw = (err, req, res, next) => {
+    console.log(err.message)
+}
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+const users = [
+    {name: 'aaa'},
+    {name: 'bbb'}
+]
+
+app.use(logger('dev'))
+app.use(mw2)
+app.use(errMw)
+
+app.get('/', (req, res) => res.send('Hello Express!!'))
+
+app.get('/users', (req, res) => res.json(users))
+
+// supertest를 위해 주석 처리
+// app.listen(3000, () => console.log('running...'))
+
+module.exports = app
