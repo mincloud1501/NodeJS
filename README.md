@@ -131,7 +131,7 @@ $ npm t # test supertest
 
 ### ■ API Server 개발 (with TDD)
 
-- index.js
+- GET /users
 
 ```js
 app.get('/users', (req, res) => {
@@ -164,4 +164,50 @@ GET /users?limit=one 400 0.505 ms - -
       √ If limit is not Integer, return 400 code
 
   3 passing (309ms)
+```
+
+- GET /users/:id
+
+```js
+app.get('/users/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10)
+    const user = users.filter(user => user.id === id)[0]
+
+    if(Number.isNaN(id)) {
+        return res.status(400).end()
+    }
+
+    if(!user) {
+        return res.status(404).end()
+    }
+    
+    res.json(user)
+})
+```
+
+```bash
+$ npm t
+
+> nodejs-api-server@1.0.0 test D:\NodeJS
+> mocha ./index.spec.js
+
+GET /users
+    Success...
+GET /users/1 200 5.005 ms - 21
+GET /users 200 0.667 ms - 67
+      √ return array...
+GET /users?limit=2 200 0.502 ms - 45
+      √ Number of maximum limits as well as response...
+    Failure...
+GET /users?limit=one 400 0.108 ms - -
+      √ If limit is not Integer, return 400 code
+
+GET /users/:id
+    Failure...
+GET /users/one 400 0.116 ms - -
+      √ id is not number
+GET /users/9 404 0.083 ms - -
+      √ not found id
+
+  5 passing (167ms)
 ```

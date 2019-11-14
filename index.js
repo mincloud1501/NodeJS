@@ -34,10 +34,25 @@ app.get('/users', (req, res) => {
 
     if(Number.isNaN(limit)) {
         res.status(400).end()
-        
+
     } else {
         res.json(users.slice(0, limit))
     }    
+})
+
+app.get('/users/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10)
+    const user = users.filter(user => user.id === id)[0]
+
+    if(Number.isNaN(id)) {
+        return res.status(400).end()
+    }
+
+    if(!user) {
+        return res.status(404).end()
+    }
+    
+    res.json(user)
 })
 
 module.exports = app

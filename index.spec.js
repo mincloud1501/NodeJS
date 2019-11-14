@@ -23,7 +23,7 @@ describe ('GET /users', () => {
                     done()
                 })
         })
-        it('Number of maximum limits as well as response...', done => {
+        it('Number of maximum limits as well as response...', (done) => {
             request(app)
                 .get('/users?limit=2')
                 .end((err,res) => {
@@ -34,13 +34,35 @@ describe ('GET /users', () => {
     })
 
     describe('Failure...', () => {
-        it('If limit is not Integer, return 400 code', done => {
+        it('If limit is not Integer, return 400 code', (done) => {
             request(app)
                 .get('/users?limit=one')
                 .expect(400)
                 .end(done)
         })
     })
-
-    
+})
+/////////////////////////////////////////////////////////////
+describe('GET /users/:id', () => {
+    describe('Success...', () => {
+        request(app)
+            .get('/users/1')
+            .end((err,res) => {
+                res.body.should.have.property('id',1)
+            })
+    })
+    describe('Failure...', () => {
+        it('id is not number', (done) => {
+            request(app)
+                .get('/users/one')
+                .expect(400)
+                .end(done)
+        })
+        it('not found id', (done) => {
+            request(app)
+                .get('/users/9')
+                .expect(404)
+                .end(done)
+        })
+    })
 })
