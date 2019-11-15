@@ -14,8 +14,8 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "start": "node ./bin/web.js",
-    "test": "mocha ./index.spec.js"
+    "start": "node ./bin/web",
+    "test": "mocha ./api/**/*.spec.js"
   },
   "repository": {
     "type": "git",

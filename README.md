@@ -131,7 +131,7 @@ $ npm t # test supertest
 
 ### ■ API Server 개발 (with TDD)
 
-#### GET /users
+#### ☞ GET /users
 
 ```js
 app.get('/users', (req, res) => {
@@ -147,7 +147,7 @@ app.get('/users', (req, res) => {
 })
 ```
 
-#### GET /users/:id
+#### ☞ GET /users/:id
 
 ```js
 app.get('/users/:id', (req, res) => {
@@ -166,7 +166,7 @@ app.get('/users/:id', (req, res) => {
 })
 ```
 
-#### DELETE /users/:id
+#### ☞ DELETE /users/:id
 
 ```js
 app.delete('/users/:id', (req, res) => {
@@ -184,7 +184,7 @@ app.delete('/users/:id', (req, res) => {
 })
 ```
 
-#### POST /users
+#### ☞ POST /users
 
 - express는 body기능 미지원, body-parser 미들웨어 추가 필요
 
@@ -215,20 +215,46 @@ app.post('/users', (req, res) => {
 })
 ```
 
-#### Refactoring
+#### ☞ Refactoring
 
 - user object 분리, express.Router 추가
+
+- What is Refactoring?
+	- 외부 동작을 바꾸지 않으면서 내부 구조를 개선하는 방법
+	- 코드가 작성된 후에 디자인을 개선하는 작업
+	- 모든 것을 미리 생각하기보다는 개발을 하면서 지속적으로 좋은 디자인을 찾는다.
+	- 메소드 내의 지역변수와 parameter를 주의 깊게 볼 필요가 있다.
+	- 값이 수정되지 않는 변수는 파라미터로 넘길 수 있다.
+	- 값이 수정되는 변수는 주의가 필요하다. 변화되는 부분을 함수로 추출하여 리턴 값으로 돌려줄 수 있다.
 
 - ./api/user/index.js
 
 ```js
 const express = require('express')
 const router = express.Router()
+const controller = require('./user.controller')
 …
+router.get('/', controller.getAllList) // Controller Biding
+router.get('/:id', controller.getList)
+router.delete('/:id', controller.delUser)
+router.post('/', controller.postUser)
+
 module.exports = router
 ```
 
-#### Test Result
+- ./api/user/index.js
+
+```js
+…
+module.exports = {
+    getAllList,
+    getList,
+    delUser,
+    postUser
+}
+```
+
+#### ☞ Test Result
 
 ```bash
 $ npm t
