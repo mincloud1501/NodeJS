@@ -45,7 +45,7 @@ const delUser = (req, res) => {
     res.status(204).end()
 }
 
-const postUser = (req, res) => {
+const addUser = (req, res) => {
     const name = req.body.name
 
     if(!name) {
@@ -65,5 +65,5 @@ module.exports = {
     getAllList,
     getList,
     delUser,
-    postUser
+    addUser
 }

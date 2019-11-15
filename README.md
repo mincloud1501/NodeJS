@@ -237,7 +237,7 @@ const controller = require('./user.controller')
 router.get('/', controller.getAllList) // Controller Biding
 router.get('/:id', controller.getList)
 router.delete('/:id', controller.delUser)
-router.post('/', controller.postUser)
+router.post('/', controller.addUser)
 
 module.exports = router
 ```
@@ -250,9 +250,14 @@ module.exports = {
     getAllList,
     getList,
     delUser,
-    postUser
+    addUser
 }
 ```
+
+#### ☞ DB Connect
+
+- DB를 객체로 추상화해 놓은 ORM (Object Relational Mapping)의 method로 data를 관리한다.
+- NodeJS SQL ORM은 sequelize 사용한다.
 
 #### ☞ Test Result
 
@@ -260,45 +265,45 @@ module.exports = {
 $ npm t
 
 > nodejs-api-server@1.0.0 test D:\NodeJS
-> mocha ./index.spec.js
+> mocha ./api/**/*.spec.js
 
   GET /users
     Success...
-GET /users/1 200 3.401 ms - 21
-GET /users 200 0.477 ms - 67
+GET /users/1 200 3.199 ms - 21
+GET /users 200 0.491 ms - 67
       √ return array...
-GET /users?limit=2 200 0.360 ms - 45
+GET /users?limit=2 200 0.319 ms - 45
       √ Number of maximum limits as well as response...
     Failure...
-GET /users?limit=one 400 0.179 ms - -
+GET /users?limit=one 400 0.116 ms - -
       √ If limit is not Integer, return 400 code
 
   GET /users/:id
     Failure...
-GET /users/one 400 0.078 ms - -
+GET /users/one 400 0.132 ms - -
       √ id is not number
-GET /users/9 404 0.099 ms - -
+GET /users/9 404 0.098 ms - -
       √ not found id
 
   DELETE /users/:id
     Success...
-DELETE /users/3 204 0.235 ms - -
+DELETE /users/3 204 0.263 ms - -
       √ response 204
     Failure...
-DELETE /users/one 400 0.093 ms - -
+DELETE /users/one 400 0.120 ms - -
       √ id is not number
-DELETE /users/9 404 0.112 ms - -
+DELETE /users/9 404 0.115 ms - -
       √ not found id
 
   POST /users
     Success...Create Object
-POST /users 201 0.379 ms - 33
-      √ response 202 (51ms)
+POST /users 201 0.400 ms - 33
+      √ response 202 (50ms)
     Failure...
-POST /users 400 0.052 ms - -
+POST /users 400 0.090 ms - -
       √ name is not
-POST /users 409 0.100 ms - -
+POST /users 409 0.141 ms - -
       √ name is duplicated
 
-  11 passing (366ms)
+  11 passing (299ms)
 ```
