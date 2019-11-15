@@ -215,6 +215,19 @@ app.post('/users', (req, res) => {
 })
 ```
 
+#### Refactoring
+
+- user object 분리, express.Router 추가
+
+- ./api/user/index.js
+
+```js
+const express = require('express')
+const router = express.Router()
+…
+module.exports = router
+```
+
 #### Test Result
 
 ```bash

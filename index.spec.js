@@ -6,13 +6,6 @@ const app = require('./index.js')
 describe ('GET /users', () => {
     describe('Success...', () => {
         it('return array...', (done) => {
-            // test assert
-            // assert.equal(1,1) 
-    
-            // test should
-            // (1).should.equal(1)
-    
-            // test super test
             request(app)
                 .get('/users')
                 .end((err, res) => {
