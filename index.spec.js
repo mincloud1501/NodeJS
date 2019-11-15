@@ -91,3 +91,31 @@ describe('DELETE /users/:id', () => {
         })
     })
 })
+/////////////////////////////////////////////////////////////
+describe('POST /users', () => {
+    describe('Success...Create Object', () => {
+        it('response 202', done => {
+            request(app)
+            .post('/users').send({name: 'ddd'})
+            .expect(201)
+            .end((err, res) => {
+                res.body.should.have.property('name', 'ddd')
+                done()
+            })
+        })
+    })
+    describe('Failure...', () => {
+        it('name is not', (done) => {
+            request(app)
+                .post('/users').send({})
+                .expect(400)
+                .end(done)
+        })
+        it('name is duplicated', (done) => {
+            request(app)
+                .post('/users').send({name: 'aaa'})
+                .expect(409)
+                .end(done)
+        })
+    })
+})

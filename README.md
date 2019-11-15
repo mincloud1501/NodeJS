@@ -184,6 +184,37 @@ app.delete('/users/:id', (req, res) => {
 })
 ```
 
+#### POST /users
+
+- express는 body기능 미지원, body-parser 미들웨어 추가 필요
+
+```bash
+$ npm i body-parser --save
+```
+
+```js
+const bodyParser = require('body-parser')
+…
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+…
+app.post('/users', (req, res) => {
+    const name = req.body.name
+
+    if(!name) {
+        return res.status(400).end()
+    }
+    const found = users.filter(user => user.name === name).length
+    if(found) {
+        return res.status(409).end()
+    }
+    const id = Date.now()
+    const user = {id, name}
+    users.push(user)
+    res.status(201).json(user)
+})
+```
+
 #### Test Result
 
 ```bash
@@ -192,33 +223,43 @@ $ npm t
 > nodejs-api-server@1.0.0 test D:\NodeJS
 > mocha ./index.spec.js
 
-GET /users
+  GET /users
     Success...
-GET /users/1 200 4.165 ms - 21
-GET /users 200 0.466 ms - 67
+GET /users/1 200 3.401 ms - 21
+GET /users 200 0.477 ms - 67
       √ return array...
-GET /users?limit=2 200 0.237 ms - 45
+GET /users?limit=2 200 0.360 ms - 45
       √ Number of maximum limits as well as response...
     Failure...
-GET /users?limit=one 400 0.135 ms - -
+GET /users?limit=one 400 0.179 ms - -
       √ If limit is not Integer, return 400 code
 
-GET /users/:id
+  GET /users/:id
     Failure...
-GET /users/one 400 0.123 ms - -
+GET /users/one 400 0.078 ms - -
       √ id is not number
-GET /users/9 404 0.079 ms - -
+GET /users/9 404 0.099 ms - -
       √ not found id
 
-DELETE /users/:id
+  DELETE /users/:id
     Success...
-DELETE /users/3 204 0.279 ms - -
+DELETE /users/3 204 0.235 ms - -
       √ response 204
     Failure...
-DELETE /users/one 400 0.156 ms - -
+DELETE /users/one 400 0.093 ms - -
       √ id is not number
-DELETE /users/9 404 0.081 ms - -
+DELETE /users/9 404 0.112 ms - -
       √ not found id
 
-  8 passing (221ms)
+  POST /users
+    Success...Create Object
+POST /users 201 0.379 ms - 33
+      √ response 202 (51ms)
+    Failure...
+POST /users 400 0.052 ms - -
+      √ name is not
+POST /users 409 0.100 ms - -
+      √ name is duplicated
+
+  11 passing (366ms)
 ```
