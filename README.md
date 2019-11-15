@@ -254,10 +254,36 @@ module.exports = {
 }
 ```
 
-#### ☞ DB Connect
+#### ☞ DB Connect (with mysql2)
 
 - DB를 객체로 추상화해 놓은 ORM (Object Relational Mapping)의 method로 data를 관리한다.
-- NodeJS SQL ORM은 sequelize 사용한다.
+- NodeJS SQL ORM으로 sequelize 사용한다.
+
+```bash
+$ npm i sequelize --save
+$ npm i mysql2 --save
+```
+
+- Create config.json
+
+```json
+{ 
+  "development": {
+	"username": "root",
+	"password": "root",
+	"database": "mincloud",
+	"host": "127.0.0.1",
+	"dialect": "mysql",
+	"operatorAliases" : false
+  }
+}
+```
+
+- DB Table modeling
+
+```js
+
+```
 
 #### ☞ Test Result
 
