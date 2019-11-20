@@ -370,6 +370,9 @@ POST /users 409 0.141 ms - -
   - File 전송 등 Text 만으로 하기 힘든 내용들을 처리하기 복잡하다.
   - 고정된 요청과 응답만 필요할 경우에는 Query로 인해 요청의 크기가 RESTful API의 경우보다 더 커진다.
   - 재귀적인 Query가 불가능하다. (결과에 따라 응답의 depth가 얼마든지 깊어질 수 있는 API를 만들 수 없다.)
+  - 캐싱, 예외처리에서 불편하고, Node.js 기반의 툴이 많아 Node.js를 사용 안하면 서버단에서 구현이 번거로움
+  - 높은 러닝커브
+  - 프론트앤드에 비해 백앤드단 툴이 부족
 
 
 ### GraphQL or RESTful ?
@@ -393,6 +396,16 @@ POST /users 409 0.141 ms - -
 - 주의해야할 것은 하나의 목표를 위해 두 API structure를 섞어놓는 것은 API의 품질을 떨어트릴 수 있다는 점이다.
   (예: 사용자 정보를 등록하는 것은 RESTful API로, 사용자 정보를 수정하는 것은 GraphQL API로 한다면 끔찍할 것이다.)
 
+### Apollo & Prisma
+
+- Apollo는 Meteor를 만들었던 그룹에서 이끌고 있는 프로젝트이다.
+- Client, Server단의 라이브러리, 캐싱 및 쿼리 분석도구를 제공한다. 특히나 React하고 결합 시 정말 Awosome한 구현이 가능하다.
+- Component 자체에 Query를 녹여서 구현하기가 엄청나게 편리해짐
+
+- Prisma는 DB Proxy.
+- GraphQL 개발자와 Heroku 창업자가 같이 진행 중인 프로젝트호 GraphQL 스키마를 기반으로 DB를 자동으로 생성해준다.
+- 사용자는 GraphQL 스키마만 설계하면 되고 DB를 설계할 필요가 없다.
+
 ---
 
 ### Basic Graphql with Express
@@ -404,8 +417,24 @@ $ npm i graphql express express-graphql
 ```js
 var graphqlHTTP = require('express-graphql');
 var Graphql = require('graphql');
-
-app.use('/graphql', graphqlHTTP({
-    graphiql: true,
-}));
+var sampleDatabase = require("./data/sampleData");
+...
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: schema,
+    graphiql: true // 라우트 경로(/graphql)에 접속했을 때 검색 도구를 노출할지 여부를 결정
+  })
+);
 ```
+
+#### ☞ Test Result
+
+- 서버를 실행하고 localhost:4000/graphql 접속
+- 정상적으로 실행된 경우, 검색 도구(graphiql true 설정) 실행됨.
+
+```bash
+$ node index3
+```
+
+![GraphQL](images/result.png)
