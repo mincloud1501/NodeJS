@@ -342,7 +342,7 @@ POST /users 409 0.141 ms - -
 - RESTful API로는 다양한 기종에서 필요한 정보들을 일일히 구현하는 것이 힘듦 (ex) iOS와 Android에서 필요한 정보들이 조금씩 달랐고, 그 다른 부분마다 API 를 구현하는 것이 힘듦)
 - 이 때문에 정보를 사용하는 측에서 원하는 대로 정보를 가져올 수 있고, 보다 편하게 정보를 수정할 수 있도록 하는 표준화된 Query language를 만들게 되었다.
 
-### GraphQL (Graph Query Language)
+### GraphQL (Graph Query Language) [![graphql](https://img.shields.io/badge/Academy-GraphQL-blue)](https://academy.nomadcoders.co/p/make-a-movie-api-with-graphql-and-nodejs-super-begginner)
 
 - GraphQL은 단일 엔드포인트를 권장한다.
 - 모든 요청을 endpoint(/graphql) 한 곳에서 처리하는 것이다.
@@ -357,6 +357,9 @@ POST /users 409 0.141 ms - -
 - 캐싱은 하나의 클라이언트 요청이 처리되는 동안 일어나는 여러번의 DB 요청 사이의 중복을 줄이는 방식의 캐싱이 사용된다. 즉, 깊이가 깊은 리소스의 Graph를 요청한 경우, 동일한 노드를 여러번 참조하게 될 수도 있다.
   - 예를 들어, 포스트 — 코멘트 — 유저 — 포스트 — 코멘트 — 유저 와 같은 recursive한 6depth짜리 요청이 들어온 경우, 세 번째 depth의 유저 노드들과 여섯 번째 depth의 유저 노드들 사이에 중복이 있을 가능성이 농후하다. 이런 경우, 단일 요청이 처리되는 동안만 캐싱을 하여 Node의 중복 방문에 대한 캐싱 기능을 한다.
 - GraphQL의 mutation은 REST의 GET이 아닌 모든 변화를 일으키는 요청을 포함한다.
+
+![GraphQL](images/graphql_architecture.png)
+
 
 ### GraphQL 과 RESTful 의 차이점
 

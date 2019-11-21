@@ -8,7 +8,7 @@ var app = express();
 app.listen(4000);
 console.log("Running a GraphQL server");
 
-//더미 데이터의 스키마
+// sampledata schema
 const productType = new Graphql.GraphQLObjectType({
     name: "Product",
     fields: {
