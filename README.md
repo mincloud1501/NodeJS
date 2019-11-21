@@ -403,11 +403,12 @@ POST /users 409 0.141 ms - -
 
 - Apollo는 Meteor를 만들었던 그룹에서 이끌고 있는 프로젝트이다.
 - Client, Server단의 라이브러리, 캐싱 및 쿼리 분석도구를 제공한다. 특히나 React하고 결합 시 정말 Awosome한 구현이 가능하다.
-- Component 자체에 Query를 녹여서 구현하기가 엄청나게 편리해짐
+- Component 자체에 `Query를 포함시켜 구현`하기가 엄청나게 편리해짐
 
 - Prisma는 DB Proxy.
-- GraphQL 개발자와 Heroku 창업자가 같이 진행 중인 프로젝트호 GraphQL 스키마를 기반으로 DB를 자동으로 생성해준다.
-- 사용자는 GraphQL 스키마만 설계하면 되고 DB를 설계할 필요가 없다.
+- GraphQL 개발자와 Heroku 창업자가 같이 진행 중인 프로젝트로 GraphQL Schema를 기반으로 `DB를 자동으로 생성`해준다.
+- 사용자는 GraphQL Schema만 설계하면 되고 DB를 설계할 필요가 없다. 그리고 DB의 모든 Schema와 Table을 GraphQL로 관리 가능
+- Prisma는 DB 도구 포함 ORM, 마이그레이션 및 관리자 UI (Postgres, MySQL 및 MongoDB)로 DB 프록시 서버 역할을 한다.
 
 ---
 
@@ -433,8 +434,8 @@ app.use(
 
 #### ☞ Test Result
 
-- 서버를 실행하고 localhost:4000/graphql 접속
-- 정상적으로 실행된 경우, 검색 도구(graphiql true 설정) 실행됨.
+- 서버를 실행하고 `localhost:4000/graphql` 접속
+- 정상적으로 실행된 경우, 검색 도구(graphiql `true` 설정) 실행됨.
 
 ```bash
 $ node index3
@@ -497,3 +498,129 @@ $ node index4.js
 - Execute first query
 
 ![Apollo](images/apollo_result.png)
+
+---
+
+### Prisma
+
+- https://www.prisma.io/ 에 회원 가입 필요
+- `ADD A SEVICE` 선택
+
+```bash
+$ npm install -g prisma
+$ prisma login -k eyJhbGciOiJIUz...
+
+Authenticating √
+Authenticated with mincloud@sk.com
+Successfully signed in
+```
+
+- `CREATE A NEW SERVICE` 선택 후 Deploy your first service
+
+```bash
+$ prisma init mincloud # Project 생성 (Demo server + MySQL database에)
+
+? Set up a new Prisma server or deploy to an existing server? Demo server + MySQL database
+? Choose the region of your demo server jho-moon-4f5fea/demo-us1
+? Choose a name for your service mincloud
+? Choose a name for your stage dev
+? Select the programming language for the generated Prisma client Prisma JavaScript Client
+
+Created 2 new files:                                                                          
+
+  prisma.yml           Prisma service definition
+  datamodel.prisma    GraphQL SDL-based datamodel (foundation for database)
+
+Next steps:
+
+  1. Open folder: cd mincloud
+  2. Deploy your Prisma service: prisma deploy
+  3. Read more about deploying services:
+     http://bit.ly/prisma-deploy-services
+
+Generating schema... 22ms
+```
+
+```bash
+$ prisma deploy
+
+Prisma CLI version: prisma/1.34.10 (windows-x64) node-v8.11.3
+Prisma server version: 1.32.0-beta
+
+For further information, please read: http://bit.ly/prisma-cli-server-sync
+
+Creating stage dev for service mincloud √
+Deploying service `mincloud` to stage `dev` to server `prisma-us1` 7.8s
+
+Changes:
+
+  User (Type)
+  + Created type `User`
+  + Created field `id` of type `ID!`
+  + Created field `name` of type `String!`
+
+Applying changes 920ms
+Generating schema 28ms
+Saving Prisma Client (JavaScript) at D:\mincloud\generated\prisma-client\
+
+Your Prisma endpoint is live:
+
+  HTTP:  https://us1.prisma.sh/jho-moon-4f5fea/mincloud/dev
+  WS:    wss://us1.prisma.sh/jho-moon-4f5fea/mincloud/dev
+
+You can view & edit your data here:
+
+  Prisma Admin: https://us1.prisma.sh/jho-moon-4f5fea/mincloud/dev/_admin
+```
+
+- `VIEW THE SERVICE` 확인 [![Sources](https://img.shields.io/badge/참고-Prisma-yellow)](https://www.prisma.io/docs/1.15/develop-prisma-service/service-configuration/data-model-knul/)
+
+![Prisma](images/prisma1.png)
+
+#### Data Model Deploy
+
+- datamodel.prisma 파일 수정
+
+```js
+type Tweet {
+  id: ID! @id
+  createdAt: DateTime!
+  text: String!
+  owner: User!
+}
+
+type User {
+  id: ID! @id
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  tweets: [Tweet!]!
+}
+```
+
+- DB Table 자동생성 확인
+
+```bash
+$ prisma deploy --force
+
+Changes:
+
+  User (Type)
+  ~ Updated field `name`. It is not required anymore.
+  + Created field `createdAt` of type `DateTime!`
+  + Created field `updatedAt` of type `DateTime!`
+  + Created field `tweets` of type `[Tweet!]!`
+
+  Tweet (Type)
+  + Created type `Tweet`
+  + Created field `id` of type `ID!`
+  + Created field `createdAt` of type `DateTime!`
+  + Created field `text` of type `String!`
+  + Created field `owner` of type `User!`
+
+  TweetToUser (Relation)
+  + Created an inline relation between `Tweet` and `User` in the column `owner` of table `Tweet`
+
+Applying changes 2.0s
+Generating schema 45ms
+```

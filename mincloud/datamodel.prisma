@@ -1,0 +1,14 @@
+type Tweet {
+  id: ID! @id
+  createdAt: DateTime!
+  text: String!
+  owner: User!
+}
+
+type User {
+  id: ID! @id
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  tweets: [Tweet!]!
+}
