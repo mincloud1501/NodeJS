@@ -6,7 +6,7 @@ var sampleDatabase = require("./data/sampleData");
 var app = express();
 
 app.listen(4000);
-console.log("Running a GraphQL server");
+console.log("Running a GraphQL Server");
 
 // sampledata schema
 const productType = new Graphql.GraphQLObjectType({

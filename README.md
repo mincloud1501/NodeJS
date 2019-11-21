@@ -441,3 +441,59 @@ $ node index3
 ```
 
 ![GraphQL](images/result.png)
+
+---
+
+### Apollo Server with GraphQL
+
+```bash
+$ npm install apollo-server graphql
+```
+
+```js
+// Define GraphQL schema
+const { ApolloServer, gql } = require('apollo-server');
+const typeDefs = gql`
+  type Book {
+    title: String
+    author: String
+  }
+  type Query {
+    books: [Book]
+  }
+`;
+//Define your data set
+const books = [
+  {
+    title: 'Harry Potter and the Chamber of Secrets',
+    author: 'J.K. Rowling',
+  },
+  {
+    title: 'Jurassic Park',
+    author: 'Michael Crichton',
+  },
+];
+// Define a resolver
+const resolvers = {
+  Query: {
+    books: () => books,
+  },
+};
+// Create an instance of ApolloServer
+const server = new ApolloServer({ typeDefs, resolvers });
+server.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`);
+});
+```
+
+- Start the server
+
+```bash
+$ node index4.js
+
+> 🚀 Server ready at http://localhost:4000/
+```
+
+- Execute first query
+
+![Apollo](images/apollo_result.png)
