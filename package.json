@@ -4,6 +4,8 @@
   "description": "nodejs-api-server",
   "main": "index.js",
   "dependencies": {
+    "@google-cloud/storage": "^4.3.0",
+    "@google-cloud/trace-agent": "^4.2.5",
     "apollo-server": "^2.9.11",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",

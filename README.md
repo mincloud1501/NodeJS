@@ -335,6 +335,33 @@ POST /users 409 0.141 ms - -
 ```
 
 ---
+
+# Node.js용 Stackdriver Trace Library 설치
+
+- VC Terminal상에서 아래 명령을 수행하여 trace-agent를 설치한 후 `npm start`해야 gcp로 전달된다.
+
+```bash
+> npm install --save @google-cloud/trace-agent
+```
+
+- 애플리케이션의 기본 스크립트 맨 위에서 또는 다른 모든 코드 앞에 있는 진입점에서 Node.js용 Stackdriver Trace 라이브러리를 가져온다.
+- Node.js용 Stackdriver Trace 라이브러리를 다른 모든 코드보다 먼저 가져와야만 Node.js용 Stackdriver Trace 라이브러리가 제대로 작동한다.
+
+```js
+require('@google-cloud/trace-agent').start();
+```
+
+- Service Account 파일이 생성되면, 아래와 같이 `GOOGLE_APPLICATION_CREDENTAILS` 환경 변수에 Service account 파일의 경로를 지정하고 google cloud의 어느 project에 있는 Stack Driver와 연결할지를 `PROJECT_ID` 환경 변수에 Project명을 지정해주면 된다.
+
+```
+$set GOOGLE_APPLICATION_CREDENTIALS "C:\zipkin-proxy-dc1792cd9893.json"
+$set GCLOUD_PROJECT "zipkin-proxy"
+```
+
+[Result]
+![Stackdriver](images/stackdriver_trace_result1.png)
+
+---
 ### REST (REpresentational State Transfer)
 
 - 모든 Resource (자료, User, …) 들을 하나의 Endpoint 에 연결해놓고, 각 Endpoint는 그 Resource 와 관련된 내용만 관리하게 하자는 방법론

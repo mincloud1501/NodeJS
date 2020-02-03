@@ -1,3 +1,5 @@
+require('@google-cloud/trace-agent').start();
+
 const assert = require('assert')
 const should = require('should')
 const request = require('supertest')
