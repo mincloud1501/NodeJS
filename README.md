@@ -365,9 +365,31 @@ $set GCLOUD_PROJECT "zipkin-proxy"
 ### REST (REpresentational State Transfer)
 
 - 모든 Resource (자료, User, …) 들을 하나의 Endpoint 에 연결해놓고, 각 Endpoint는 그 Resource 와 관련된 내용만 관리하게 하자는 방법론
-- 이런 REST 의 조건을 만족하는 API를 RESTful API라고 하며, 이런 방식으로 API를 작성하는 것을 RESTful하다고 한다.
-- RESTful API로는 다양한 기종에서 필요한 정보들을 일일히 구현하는 것이 힘듦 (ex) iOS와 Android에서 필요한 정보들이 조금씩 달랐고, 그 다른 부분마다 API 를 구현하는 것이 힘듦)
+- 이런 REST 의 조건을 만족하는 API를 `RESTful API`라고 하며, 이런 방식으로 API를 작성하는 것을 RESTful하다고 한다.
+- RESTful API로는 다양한 기종에서 필요한 정보들을 일일히 구현하는 것이 힘들다. (ex) iOS와 Android에서 필요한 정보들이 조금씩 달랐고, 그 다른 부분마다 API 를 구현하는 것이 힘들다.)
 - 이 때문에 정보를 사용하는 측에서 원하는 대로 정보를 가져올 수 있고, 보다 편하게 정보를 수정할 수 있도록 하는 표준화된 Query language를 만들게 되었다.
+
+- RESTful Interface의 경우 가장 일반적인 선택은 JSON을 사용하는 HTTP를 통한 REST이다. RPC style interface의 경우 gRPC, Apache Avro 및 Apache Thrift 등의 framework가 있다.
+
+#### RESTful API Design [![graphql](https://img.shields.io/badge/RESTful-Design-blue)](https://docs.microsoft.com/ko-kr/azure/architecture/best-practices/api-design)
+
+- 잘 디자인된 웹 API는 아래와 같은 특성을 지원해야 한다.
+  - `플랫폼 독립성` : 모든 클라이언트는 내부에서 API가 구현되는 방법에 관계없이 API를 호출할 수 있어야 하기에 표준 프로토콜을 사용해야 하고, 클라이언트 및 웹 서비스가 교환할 데이터 형식에 동의할 수 있는 메커니즘이 있어야 한다.
+  - `서비스 진화` : Web API는 클라이언트 애플리케이션과 독립적으로 기능을 진화시키고 추가할 수 있어야 한다. API가 진화해도 기존 클라이언트 애플리케이션은 수정 없이 계속 작동할 수 있어야 한다. 모든 기능은 클라이언트 애플리케이션이 해당 기능을 완전히 이용할 수 있도록 검색이 가능해야 한다.
+
+- 리소스를 중심으로 API 구성해야 한다.
+  - 웹 API가 표시하는 비즈니스 엔터티에 집중해야 한다.
+  - URI에 일관적인 명명 규칙을 적용한다.
+
+- HTTP 메서드를 기준으로 작업을 정의해야 한다.
+  - `GET` : 지정된 URI에서 리소스의 표현을 검색한다. 응답 메시지의 본문은 요청된 리소스의 세부 정보를 포함하고 있다.
+  - `POST` : 지정된 URI에 새 리소스를 만든다. 요청 메시지의 본문은 새 리소스의 세부 정보를 제공한다. 참고로 POST를 사용하여 실제로 리소스를 만들지 않는 작업을 트리거할 수도 있다.
+  - `PUT` : 지정된 URI에 리소스를 만들거나 대체힌다. 요청 메시지의 본문은 만들거나 업데이트할 리소스를 지정한다.
+  - `PATCH` : 리소스의 부분 업데이트를 수행한다. 요청 본문은 리소스에 적용할 변경 내용을 지정한다.
+  - `DELETE` : 지정된 URI의 리소스를 제거한다.
+
+- 신중하게 설계된 RESTful Web API는 Client 응용 프로그램에서 액세스할 수 있는 리소스, 관계 및 탐색 스키마를 정의한다. Web API를 구현하고 배포하는 경우 Web API를 호스팅하는 환경의 실제 요구 사항을 고려하고 데이터의 논리 구조보다는 Web API가 생성된 방식을 고려해야 한다.
+
 
 ### GraphQL (Graph Query Language) [![graphql](https://img.shields.io/badge/Academy-GraphQL-blue)](https://academy.nomadcoders.co/p/make-a-movie-api-with-graphql-and-nodejs-super-begginner)
 
