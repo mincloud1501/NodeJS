@@ -16,7 +16,7 @@
     "sequelize": "^5.21.2"
   },
   "devDependencies": {
-    "mocha": "^6.2.2",
+    "mocha": "^10.1.0",
     "should": "^13.2.3",
     "supertest": "^4.0.2"
   },
